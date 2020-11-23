@@ -1,0 +1,15 @@
+{
+  "name": "@metacentre/importmap",
+  "version": "0.0.1",
+  "description": "serve importmap with ssb.ws",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ssb",
+    "importmap"
+  ],
+  "author": "av8ta",
+  "license": "MIT"
+}
