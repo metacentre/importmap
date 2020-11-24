@@ -3,7 +3,7 @@ const { join } = require('path')
 
 module.exports = {
   name: 'importmap',
-  version: '0.0.1',
+  version: require('./package.json').version,
   manifest: {
     write: 'sync',
     serve: 'sync'
