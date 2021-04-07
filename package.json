@@ -11,5 +11,9 @@
     "importmap"
   ],
   "author": "av8ta",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:metacentre/bos/plugins/importmap.git"
+  }
 }
