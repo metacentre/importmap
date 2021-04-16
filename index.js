@@ -7,8 +7,7 @@ module.exports = {
   manifest: {
     read: 'sync',
     write: 'sync',
-    upsert: 'sync',
-    serve: 'sync'
+    upsert: 'sync'
   },
   init: (api, config) => {
     const read = () => {
@@ -46,7 +45,12 @@ module.exports = {
       }
 
       const { protocol, host, port } = config.httpserver
-      const server = `${protocol}${'://'}${host}:${port}`
+
+      const server =
+        host === 'localhost'
+          ? `${protocol}${'://'}${host}:${port}` // locally
+          : `${protocol}${'://'}${host}` // production
+
       const { scope, name, route, file } = entry
       const scopeName = join(scope, name)
       const url = join(server, route, file).replace(':/', '://')
@@ -54,34 +58,11 @@ module.exports = {
       write(importmap)
       return importmap
     }
-    const serve = () => {
-      if (!api.ws) {
-        throw new Error('importmap plugin requires ssb-ws plugin to be loaded')
-      }
-      /** load importmap.json from database path */
-      const path = join(config.path, 'importmap.json')
-      let importmap
-      try {
-        importmap = fs.readFileSync(path)
-        importmap = JSON.parse(importmap)
-      } catch (error) {
-        throw new Error('importmap is missing or not valid json')
-      }
-      /** serve importmap */
-      api.ws.use((req, res, next) => {
-        if (req.url === '/importmap') {
-          res.setHeader('Content-Type', 'application/json')
-          res.setHeader('Access-Control-Allow-Origin', '*') // todo: tighten this up perhaps?
-          res.end(JSON.stringify(importmap, null, 2))
-        } else next()
-      })
-    }
 
     return {
       read,
       write,
-      upsert,
-      serve
+      upsert
     }
   }
 }
