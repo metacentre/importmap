@@ -1,18 +1,18 @@
 const fs = require('fs')
 const { join } = require('path')
 const mkdirp = require('mkdirp')
+const pkg = require('./package.json')
 
 module.exports = {
   name: 'importmap',
-  version: require('./package.json').version,
+  version: pkg.version,
   manifest: {
     read: 'sync',
     write: 'sync',
     upsert: 'sync'
   },
-  init: (api, config) => {
-    console.log('[@metacentre/importmap] init')
-    console.log('[@metacentre/importmap] config', config)
+  init(api, config) {
+    console.log(`[${pkg.name}] v${pkg.version} init`)
 
     /** create public path to hold importmap */
     mkdirp.sync(join(config.path, 'public'))
@@ -42,16 +42,7 @@ module.exports = {
       return true
     }
 
-    const upsert = entry => {
-      /** entry comes from microfrontends.config.json
-       *  they look like this
-        {
-          "scope": "@metacentre",
-          "name": "styleguide",
-          "route": "/microfrontends/styleguide/",
-          "file": "metacentre-styleguide.js"
-        }
-      */
+    const upsert = (key, value) => {
       let importmap
       /** create blank importmap if none on disk */
       try {
@@ -60,17 +51,7 @@ module.exports = {
         importmap = { imports: {} }
       }
 
-      const { protocol, host, port } = config.httpserver
-
-      const server =
-        host === 'localhost'
-          ? `${protocol}${'://'}${host}:${port}` // locally
-          : `${protocol}${'://'}${host}` // production
-
-      const { scope, name, route, file } = entry
-      const scopeName = join(scope, name)
-      const url = join(server, route, file).replace(':/', '://')
-      importmap.imports[scopeName] = url
+      importmap.imports[key] = value
       write(importmap)
       return importmap
     }
