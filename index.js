@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { join } = require('path')
+const mkdirp = require('mkdirp')
 
 module.exports = {
   name: 'importmap',
@@ -10,10 +11,16 @@ module.exports = {
     upsert: 'sync'
   },
   init: (api, config) => {
+    console.log('[@metacentre/importmap] init')
+    console.log('[@metacentre/importmap] config', config)
+
+    /** create public path to hold importmap */
+    mkdirp.sync(join(config.path, 'public'))
+    const importmapPath = join(config.path, 'public', 'importmap.json')
+
     const read = () => {
-      const path = join(config.path, 'importmap.json')
       try {
-        const importmap = require(path)
+        const importmap = require(importmapPath)
         return importmap
       } catch (error) {
         throw new Error(`Error reading importmap from disk ${error}`)
@@ -21,14 +28,14 @@ module.exports = {
     }
 
     const write = importmap => {
-      const path = join(config.path, 'importmap.json')
       try {
         JSON.parse(JSON.stringify(importmap))
       } catch (error) {
         throw new Error('importmap is not valid json')
       }
       try {
-        fs.writeFileSync(path, JSON.stringify(importmap, null, 2))
+        console.log('attempting to write importmap to ', importmapPath)
+        fs.writeFileSync(importmapPath, JSON.stringify(importmap, null, 2))
       } catch (error) {
         throw new Error('error writing importmap to disk')
       }
@@ -36,6 +43,15 @@ module.exports = {
     }
 
     const upsert = entry => {
+      /** entry comes from microfrontends.config.json
+       *  they look like this
+        {
+          "scope": "@metacentre",
+          "name": "styleguide",
+          "route": "/microfrontends/styleguide/",
+          "file": "metacentre-styleguide.js"
+        }
+      */
       let importmap
       /** create blank importmap if none on disk */
       try {
