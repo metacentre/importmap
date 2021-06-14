@@ -20,5 +20,8 @@
   },
   "dependencies": {
     "mkdirp": "^1.0.4"
+  },
+  "devDependencies": {
+    "debug": "^4.3.1"
   }
 }
