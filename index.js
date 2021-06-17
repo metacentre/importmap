@@ -15,7 +15,7 @@ module.exports = {
   init(api, config) {
     debug(`[${pkg.name}] v${pkg.version} init`)
 
-    let importmap
+    let importmap = config.importmap
 
     /** create public path to hold importmap */
     mkdirp.sync(join(config.path, 'public'))
@@ -61,10 +61,16 @@ module.exports = {
       return importmapExisting
     }
 
-    /** create blank importmap if none on disk */
+    /** initialise importmap */
     try {
+      /** if config.importmap exists write a fresh file */
+      if (importmap) write(importmap)
       importmap = read()
     } catch (error) {
+      /**
+       * if neither neither config.importmap or one on file
+       * create blank importmap
+       * */
       importmap = { imports: {} }
     }
 
