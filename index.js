@@ -72,6 +72,7 @@ module.exports = {
        * create blank importmap
        * */
       importmap = { imports: {} }
+      write(importmap)
     }
 
     return {
