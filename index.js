@@ -71,7 +71,7 @@ module.exports = {
        * if neither neither config.importmap or one on file
        * create blank importmap
        * */
-      importmap = { imports: {} }
+      importmap = { imports: {}, scopes: {} }
       write(importmap)
     }
 
