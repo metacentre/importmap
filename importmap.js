@@ -21,7 +21,7 @@ module.exports = {
     mkdirp.sync(join(config.path, 'public'))
     const importmapPath = join(config.path, 'public', 'importmap.json')
 
-    const read = () => {
+    function read() {
       try {
         const importmapDisk = require(importmapPath)
         importmap = importmapDisk
@@ -31,7 +31,7 @@ module.exports = {
       }
     }
 
-    const write = importmapToWrite => {
+    function write(importmapToWrite) {
       try {
         JSON.parse(JSON.stringify(importmapToWrite))
       } catch (error) {
@@ -48,7 +48,7 @@ module.exports = {
       return true
     }
 
-    const upsert = (key, value) => {
+    function upsert(key, value) {
       let importmapExisting
       /** create blank importmap if none on disk */
       try {
@@ -68,7 +68,7 @@ module.exports = {
       importmap = read()
     } catch (error) {
       /**
-       * if neither neither config.importmap or one on file
+       * if neither config.importmap or one on file
        * create blank importmap
        * */
       importmap = { imports: {}, scopes: {} }
