@@ -1,7 +1,7 @@
 {
   "name": "@metacentre/importmap",
   "version": "1.0.0",
-  "description": "manage importmap",
+  "description": "secret-stack plugin to read, upsert, and write an importmap",
   "main": "importmap.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,7 +16,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@gitlab.com:metacentre/bos/plugins/importmap.git"
+    "url": "git@github.com:metacentre/importmap.git"
   },
   "dependencies": {
     "debug": "^4.3.1",

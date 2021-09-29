@@ -15,6 +15,7 @@ module.exports = {
   init(api, config) {
     debug(`[${pkg.name}] v${pkg.version} init`)
 
+    /** set importmap to value in config, if any */
     let importmap = config.importmap
 
     /** create public path to hold importmap */
